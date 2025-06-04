@@ -1,36 +1,36 @@
-nom du buff,catégorie,description du buff,flamme ardente,pouvoir draconique,coeur terrestre,magie noire,invocation daedrique,appel de la tempête,assassinat,ombre,siphon,lance aedrique,courroux de l'aube,rétablissement lumineux,compagnons animaux,étreinte hivernale,équilibre vert,seigneur des sépultures,tyran des os,mort-vivant,héraut du tome,soldat d'apocrypha,runes curatives
-berserk majeur,offensif,10% dégâts,x,,,,x,,x,,,,,,,,,,,,,,
-berserk mineur,offensif,5% dégâts,,,,x,,,x,,,,,,x,,,,,,,,
-brutalité majeur,offensif,20% dégâts physiques,,,x,,,x,,,x,x,,,x,,,x,,,x,,
-brutalité mineur,offensif,10% dégâts physiques,,,x,,,,,,,,,,,,,,,,,,
-courage mineur,offensif,215 dégâts physiques et magiques,,,,,,,,,x,,,,,,,,,,,,x
-renforcement,offensif,70% prochaine attaque lourde,,,x,,,,x,,,,x,,,,,,x,,,,
-endurance majeur,offensif,30% de récupération de vigueur,,x,,,,,,,,,,,,,,,,,,,
-endurance mineur,offensif,15% de récupération de vigueur,,,,,x,,,x,,,,x,,,x,,,,,,x
-évitement majeur,défensif,réduit 20% attaque de zone,,,,,,,,x,,,,,,,,,,,,,
-évitement mineur,défensif,réduit 10% attaque de zone,,,,,,,,,,,,,x,,,,,,,x,
-expédition majeur,déplacement,30% de déplacement,x,,,,,x,,x,,,,,x,x,,,,,,,x
-expédition mineur,déplacement,15% de déplacement,,,,,,x,x,,,,,x,,,,,,,,,
-force mineur,offensif,10% dégâts critiques,,,,x,,,,,,,,,,,,,,,,,
-guérison majeur,défensif,16% de soins,,,x,,,,,,,,,,,,x,,,,,,
-guérison mineur,défensif,8% de soins,,,,,,,,,x,,,x,,,,,,,,,
-héroisme majeur,offensif,"3 ultimes en 1,5s",,,,,,,,,,,,,,x,,,,,,,
-héroisme mineur,offensif,"1 ultime en 1,5s",,,,,,,,,,,,,,,,,,,,,x
-intellect mineur,offensif,15% de récupération de magie,,,,,x,,,x,,,,x,,,x,,,,,,x
-prophétie majeur,offensif,2629 score critique magique,x,,,,,,,x,,,x,,,,x,x,,,,,
-prophétie mineur,offensif,1314 score critique magique,,,,x,,,,,,,,,,,,,,,,,
-protection majeur,défensif,réduit dégâts 10%,,,,,,,,x,,x,,x,,x,,,x,,,,x
-protection mineur,défensif,réduit dégâts 5%,,,,,x,,,x,,x,,,,x,,,x,,,x,
-résolution majeur,défensif,5948 résitance physique et magique,,x,,,,x,,x,,,,x,,x,,,x,,,x,
-résolution mineur,défensif,2974 résitance physique et magique,,,,,x,,,x,,,,,,,,,,,,x,
-résilience majeur,défensif,30% de récupération de santé,,x,,,,,,,,,,,,,,,,,,,
-résilience mineur,défensif,15% de récupération de santé,,,,,,,,,,,,x,,,,,,,,,x
-sauvagerie majeur,offensif,2629 score critique physique,x,,,,,,,x,,,x,,,,x,x,,,,,
-sauvagerie mineur,offensif,1314 score critique physique,,,,,,,x,,,,,,,,,,,,,,
-solidité mineur,défensif,10% santé maximal,,,,,,,,,,,,,,,x,,,,,,
-sorcellerie majeur,offensif,20% dégâts magique,,,x,,,x,,,x,x,,,x,,,x,,,x,,
-sorcellerie mineur,offensif,10% dégâts magique,,,,,,,,,,,x,,,,,,,,,,
-vitalité majeur,défensif,12% soins/bouclier reçus,,,,,,,,,x,,,,,,,,,,,,
-vitalité mineur,défensif,6% soins/bouclier reçus,,x,,x,,,,,,,,,,,,,,,,,
-vol de magie mineur,offensif,,,,,,,,,,x,,,,,,,,,,,,
-vol de vie mineur,défensif,,,,,,,,,,,,,,,,x,,,,,,
+nom du buff,catégorie,dégâts,description du buff,flamme ardente,pouvoir draconique,coeur terrestre,magie noire,invocation daedrique,appel de la tempête,assassinat,ombre,siphon,lance aedrique,courroux de l'aube,rétablissement lumineux,compagnons animaux,étreinte hivernale,équilibre vert,seigneur des sépultures,tyran des os,mort-vivant,héraut du tome,soldat d'apocrypha,runes curatives
+berserk majeur,offensif,tout,10% dégâts,x,,,,x,,x,,,,,,,,,,,,,,
+berserk mineur,offensif,tout,5% dégâts,,,,x,,,x,,,,,,x,,,,,,,,
+brutalité majeur,offensif,physique,20% dégâts physiques,,,x,,,x,,,x,x,,,x,,,x,,,x,,
+brutalité mineur,offensif,physique,10% dégâts physiques,,,x,,,,,,,,,,,,,,,,,,
+courage mineur,offensif,tout,215 dégâts physiques et magiques,,,,,,,,,x,,,,,,,,,,,,x
+renforcement,offensif,tout,70% prochaine attaque lourde,,,x,,,,x,,,,x,,,,,,x,,,,
+endurance majeur,offensif,physique,30% de récupération de vigueur,,x,,,,,,,,,,,,,,,,,,,
+endurance mineur,offensif,physique,15% de récupération de vigueur,,,,,x,,,x,,,,x,,,x,,,,,,x
+évitement majeur,défensif,,réduit 20% attaque de zone,,,,,,,,x,,,,,,,,,,,,,
+évitement mineur,défensif,,réduit 10% attaque de zone,,,,,,,,,,,,,x,,,,,,,x,
+expédition majeur,déplacement,,30% de déplacement,x,,,,,x,,x,,,,,x,x,,,,,,,x
+expédition mineur,déplacement,,15% de déplacement,,,,,,x,x,,,,,x,,,,,,,,,
+force mineur,offensif,tout,10% dégâts critiques,,,,x,,,,,,,,,,,,,,,,,
+guérison majeur,défensif,,16% de soins,,,x,,,,,,,,,,,,x,,,,,,
+guérison mineur,défensif,,8% de soins,,,,,,,,,x,,,x,,,,,,,,,
+héroisme majeur,offensif,tout,"3 ultimes en 1,5s",,,,,,,,,,,,,,x,,,,,,,
+héroisme mineur,offensif,tout,"1 ultime en 1,5s",,,,,,,,,,,,,,,,,,,,,x
+intellect mineur,offensif,magique,15% de récupération de magie,,,,,x,,,x,,,,x,,,x,,,,,,x
+prophétie majeur,offensif,magique,2629 score critique magique,x,,,,,,,x,,,x,,,,x,x,,,,,
+prophétie mineur,offensif,magique,1314 score critique magique,,,,x,,,,,,,,,,,,,,,,,
+protection majeur,défensif,,réduit dégâts 10%,,,,,,,,x,,x,,x,,x,,,x,,,,x
+protection mineur,défensif,,réduit dégâts 5%,,,,,x,,,x,,x,,,,x,,,x,,,x,
+résolution majeur,défensif,,5948 résitance physique et magique,,x,,,,x,,x,,,,x,,x,,,x,,,x,
+résolution mineur,défensif,,2974 résitance physique et magique,,,,,x,,,x,,,,,,,,,,,,x,
+résilience majeur,défensif,,30% de récupération de santé,,x,,,,,,,,,,,,,,,,,,,
+résilience mineur,défensif,,15% de récupération de santé,,,,,,,,,,,,x,,,,,,,,,x
+sauvagerie majeur,offensif,physique,2629 score critique physique,x,,,,,,,x,,,x,,,,x,x,,,,,
+sauvagerie mineur,offensif,physique,1314 score critique physique,,,,,,,x,,,,,,,,,,,,,,
+solidité mineur,défensif,,10% santé maximal,,,,,,,,,,,,,,,x,,,,,,
+sorcellerie majeur,offensif,magique,20% dégâts magique,,,x,,,x,,,x,x,,,x,,,x,,,x,,
+sorcellerie mineur,offensif,magique,10% dégâts magique,,,,,,,,,,,x,,,,,,,,,,
+vitalité majeur,défensif,,12% soins/bouclier reçus,,,,,,,,,x,,,,,,,,,,,,
+vitalité mineur,défensif,,6% soins/bouclier reçus,,x,,x,,,,,,,,,,,,,,,,,
+vol de magie mineur,offensif,magique,,,,,,,,,,x,,,,,,,,,,,,
+vol de vie mineur,défensif,,,,,,,,,,,,,,,,,x,,,,,,
