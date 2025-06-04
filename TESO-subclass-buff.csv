@@ -5,8 +5,8 @@ brutalité majeur,offensif,20% dégâts physiques,,,x,,,x,,,x,x,,,x,,,x,,,x,,
 brutalité mineur,offensif,10% dégâts physiques,,,x,,,,,,,,,,,,,,,,,,
 courage mineur,offensif,215 dégâts physiques et magiques,,,,,,,,,x,,,,,,,,,,,,x
 renforcement,offensif,70% prochaine attaque lourde,,,x,,,,x,,,,x,,,,,,x,,,,
-endurance majeur,regen,30% de récupération de vigueur,,x,,,,,,,,,,,,,,,,,,,
-endurance mineur,regen,15% de récupération de vigueur,,,,,x,,,x,,,,x,,,x,,,,,,x
+endurance majeur,offensif,30% de récupération de vigueur,,x,,,,,,,,,,,,,,,,,,,
+endurance mineur,offensif,15% de récupération de vigueur,,,,,x,,,x,,,,x,,,x,,,,,,x
 évitement majeur,défensif,réduit 20% attaque de zone,,,,,,,,x,,,,,,,,,,,,,
 évitement mineur,défensif,réduit 10% attaque de zone,,,,,,,,,,,,,x,,,,,,,x,
 expédition majeur,déplacement,30% de déplacement,x,,,,,x,,x,,,,,x,x,,,,,,,x
@@ -14,9 +14,9 @@ expédition mineur,déplacement,15% de déplacement,,,,,,x,x,,,,,x,,,,,,,,,
 force mineur,offensif,10% dégâts critiques,,,,x,,,,,,,,,,,,,,,,,
 guérison majeur,défensif,16% de soins,,,x,,,,,,,,,,,,x,,,,,,
 guérison mineur,défensif,8% de soins,,,,,,,,,x,,,x,,,,,,,,,
-héroisme majeur,regen,"3 ultimes en 1,5s",,,,,,,,,,,,,,x,,,,,,,
-héroisme mineur,regen,"1 ultime en 1,5s",,,,,,,,,,,,,,,,,,,,,x
-intellect mineur,regen,15% de récupération de magie,,,,,x,,,x,,,,x,,,x,,,,,,x
+héroisme majeur,offensif,"3 ultimes en 1,5s",,,,,,,,,,,,,,x,,,,,,,
+héroisme mineur,offensif,"1 ultime en 1,5s",,,,,,,,,,,,,,,,,,,,,x
+intellect mineur,offensif,15% de récupération de magie,,,,,x,,,x,,,,x,,,x,,,,,,x
 prophétie majeur,offensif,2629 score critique magique,x,,,,,,,x,,,x,,,,x,x,,,,,
 prophétie mineur,offensif,1314 score critique magique,,,,x,,,,,,,,,,,,,,,,,
 protection majeur,défensif,réduit dégâts 10%,,,,,,,,x,,x,,x,,x,,,x,,,,x
@@ -32,5 +32,5 @@ sorcellerie majeur,offensif,20% dégâts magique,,,x,,,x,,,x,x,,,x,,,x,,,x,,
 sorcellerie mineur,offensif,10% dégâts magique,,,,,,,,,,,x,,,,,,,,,,
 vitalité majeur,défensif,12% soins/bouclier reçus,,,,,,,,,x,,,,,,,,,,,,
 vitalité mineur,défensif,6% soins/bouclier reçus,,x,,x,,,,,,,,,,,,,,,,,
-vol de magie mineur,regen,,,,,,,,,,x,,,,,,,,,,,,
+vol de magie mineur,offensif,,,,,,,,,,x,,,,,,,,,,,,
 vol de vie mineur,défensif,,,,,,,,,,,,,,,,x,,,,,,
