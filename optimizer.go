@@ -1,7 +1,24 @@
+/*
+ *
+ * Copyright 2025 dvaumoron.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package main
 
 import (
-	"cmp"
 	"encoding/csv"
 	"maps"
 	"os"
@@ -14,9 +31,9 @@ func main() {
 		panic("Please provide a path to the sub-class data file.")
 	}
 
-	filter := ""
+	filter := noFilter
 	if len(os.Args) > 2 {
-		filter = os.Args[2]
+		filter = parseFilter(os.Args[2])
 	}
 
 	skillGroups := readSkillGroupData(os.Args[1], filter)
@@ -40,26 +57,7 @@ func main() {
 	csvWriter.Flush()
 }
 
-type SkillGroup struct {
-	name  string
-	buffs map[string]*Buff
-}
-
-func (sg SkillGroup) ToCSV() []string {
-	res := make([]string, len(sg.buffs)+3)
-	copy(res, strings.Split(sg.name, ","))
-	copy(res[3:], slices.Sorted(maps.Keys(sg.buffs)))
-	return res
-}
-
-type Buff struct {
-	name        string
-	category    string
-	description string
-	valid       bool
-}
-
-func readSkillGroupData(path string, filter string) []SkillGroup {
+func readSkillGroupData(path string, buffFilter BuffFilter) []SkillGroup {
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -72,29 +70,41 @@ func readSkillGroupData(path string, filter string) []SkillGroup {
 		panic(err)
 	}
 
-	buffs := make([]Buff, len(data)-1)
+	groupNames := data[0][4:]
+	skillGroupCount := len(groupNames)
+	buffs := make([]*Buff, len(data)-1)
 	for buffIndex, buffLine := range data[1:] {
-		buff := Buff{
-			name:        buffLine[0],
-			category:    buffLine[1],
-			description: buffLine[2],
+		catStr := buffLine[1]
+		category, ok := ParseCategory(catStr)
+		if !ok {
+			panic("Invalid category: " + catStr)
 		}
 
-		buff.valid = filter == "" || buff.category == filter
+		buff := Buff{
+			name:        buffLine[0],
+			category:    category,
+			damage:      ParseDamageType(buffLine[2]),
+			description: buffLine[3],
+			skillGroups: make(map[string]struct{}, skillGroupCount),
+		}
 
-		buffs[buffIndex] = buff
+		for groupIndex, okStr := range buffLine[4:] {
+			if okStr != "" {
+				buff.skillGroups[groupNames[groupIndex]] = struct{}{}
+			}
+		}
+
+		buff.valid = buffFilter(&buff)
+
+		buffs[buffIndex] = &buff
 	}
 
-	groupNames := data[0][3:]
-	skillGroups := make([]SkillGroup, len(groupNames))
+	skillGroups := make([]SkillGroup, skillGroupCount)
 	for groupIndex, groupName := range groupNames {
-		columnIndex := groupIndex + 3
 		groupBuffs := map[string]*Buff{}
-		for buffIndex, buffLine := range data[1:] {
-			if buffLine[columnIndex] != "" && buffs[buffIndex].valid {
-				buffName := buffLine[0]
-
-				groupBuffs[buffName] = &buffs[buffIndex]
+		for _, buff := range buffs {
+			if _, ok := buff.skillGroups[groupName]; ok && buff.valid {
+				groupBuffs[buff.name] = buff
 			}
 		}
 
@@ -150,8 +160,4 @@ func mergeBy3(groups []SkillGroup) []SkillGroup {
 	}
 
 	return mergedGroups
-}
-
-func compareSkillGroup(a, b SkillGroup) int {
-	return cmp.Compare(len(b.buffs), len(a.buffs))
 }
