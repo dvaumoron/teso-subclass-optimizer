@@ -14,7 +14,12 @@ func main() {
 		panic("Please provide a path to the sub-class data file.")
 	}
 
-	skillGroups := readSkillGroupData(os.Args[1])
+	filter := ""
+	if len(os.Args) > 2 {
+		filter = os.Args[2]
+	}
+
+	skillGroups := readSkillGroupData(os.Args[1], filter)
 
 	mergedBy3 := mergeBy3(skillGroups)
 
@@ -51,9 +56,10 @@ type Buff struct {
 	name        string
 	category    string
 	description string
+	valid       bool
 }
 
-func readSkillGroupData(path string) []SkillGroup {
+func readSkillGroupData(path string, filter string) []SkillGroup {
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -68,11 +74,15 @@ func readSkillGroupData(path string) []SkillGroup {
 
 	buffs := make([]Buff, len(data)-1)
 	for buffIndex, buffLine := range data[1:] {
-		buffs[buffIndex] = Buff{
+		buff := Buff{
 			name:        buffLine[0],
 			category:    buffLine[1],
 			description: buffLine[2],
 		}
+
+		buff.valid = filter == "" || buff.category == filter
+
+		buffs[buffIndex] = buff
 	}
 
 	groupNames := data[0][3:]
@@ -81,7 +91,7 @@ func readSkillGroupData(path string) []SkillGroup {
 		columnIndex := groupIndex + 3
 		groupBuffs := map[string]*Buff{}
 		for buffIndex, buffLine := range data[1:] {
-			if buffLine[columnIndex] != "" {
+			if buffLine[columnIndex] != "" && buffs[buffIndex].valid {
 				buffName := buffLine[0]
 
 				groupBuffs[buffName] = &buffs[buffIndex]
