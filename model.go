@@ -21,79 +21,36 @@ package main
 import (
 	"cmp"
 	"maps"
+	"math"
 	"slices"
 	"strings"
 )
 
-const (
-	att Category = iota
-	def
-	move
-)
+const maxPriority = 100
 
-type Category int
-
-// parse from french ^^;
-func ParseCategory(s string) (Category, bool) {
-	switch strings.ToLower(s) {
-	case "offensif":
-		return att, true
-	case "défensif":
-		return def, true
-	case "déplacement":
-		return move, true
-	default:
-		return 0, false
-	}
-}
-
-func (c Category) Filter(b *Buff) bool {
-	return c == b.category
-}
-
-const (
-	none DamageType = iota
-	physical
-	magical
-	all
-)
-
-type DamageType int
-
-// parse from french ^^;
-func ParseDamageType(s string) DamageType {
-	switch strings.ToLower(s) {
-	case "physique":
-		return physical
-	case "magique":
-		return magical
-	case "tout":
-		return all
-	default:
-		return none
-	}
-}
-
-func (dt DamageType) Filter(b *Buff) bool {
-	switch dt2 := b.damage; dt {
-	case physical:
-		return dt2 == physical || dt2 == all
-	case magical:
-		return dt2 == magical || dt2 == all
-	case all:
-		return dt2 != none
-	default:
-		return true
-	}
-}
+var prioritiesCache = map[string][]uint{}
 
 type Buff struct {
 	name        string
-	category    Category
-	damage      DamageType
+	category    string
+	damage      string
 	description string
 	skillGroups map[string]struct{}
-	valid       bool
+	priority    uint
+}
+
+func zeroAsMax(i uint) uint {
+	if i == 0 {
+		return math.MaxUint
+	}
+	return i
+}
+
+func compareBuffByPriorityName(a *Buff, b *Buff) int {
+	return cmp.Or(
+		cmp.Compare(zeroAsMax(a.priority), zeroAsMax(b.priority)),
+		cmp.Compare(a.name, b.name),
+	)
 }
 
 type SkillGroup struct {
@@ -101,13 +58,49 @@ type SkillGroup struct {
 	buffs map[string]*Buff
 }
 
-func (sg SkillGroup) ToCSV() []string {
-	res := make([]string, len(sg.buffs)+3)
+func (sg SkillGroup) ToCSV(priorityFlag bool) []string {
+	res := make([]string, 3, len(sg.buffs)+3)
 	copy(res, strings.Split(sg.name, ","))
-	copy(res[3:], slices.Sorted(maps.Keys(sg.buffs)))
+	if priorityFlag {
+		for _, buff := range slices.SortedFunc(maps.Values(sg.buffs), compareBuffByPriorityName) {
+			res = append(res, buff.name)
+		}
+	} else {
+		res = append(res, slices.Sorted(maps.Keys(sg.buffs))...)
+	}
 	return res
 }
 
-func compareSkillGroup(a, b SkillGroup) int {
+func compareSkillGroupByNumber(a SkillGroup, b SkillGroup) int {
 	return cmp.Compare(len(b.buffs), len(a.buffs))
+}
+
+func compareSkillGroupByPriority(a SkillGroup, b SkillGroup) int {
+	aCount := countByPriority(a)
+	bCount := countByPriority(b)
+
+	for i := 1; i < maxPriority; i++ {
+		if c := cmp.Compare(bCount[i], aCount[i]); c != 0 {
+			return c
+		}
+	}
+
+	return cmp.Compare(bCount[0], aCount[0])
+}
+
+func countByPriority(group SkillGroup) []uint {
+	groupName := group.name
+	priorities, ok := prioritiesCache[groupName]
+	if ok {
+		return priorities
+	}
+
+	priorities = make([]uint, maxPriority)
+	for _, buff := range group.buffs {
+		priorities[buff.priority]++
+	}
+
+	prioritiesCache[groupName] = priorities
+
+	return priorities
 }

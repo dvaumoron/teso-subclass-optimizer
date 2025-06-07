@@ -23,22 +23,32 @@ import (
 	"maps"
 	"os"
 	"slices"
+	"strconv"
 	"strings"
 )
 
 func main() {
-	if len(os.Args) < 2 {
+	skillGroupFilePath, priorityFilePath := "", ""
+	switch lenArgs := len(os.Args); {
+	case lenArgs < 2:
 		panic("Please provide a path to the sub-class data file.")
+	default:
+		priorityFilePath = os.Args[2]
+		fallthrough
+	case lenArgs == 2:
+		skillGroupFilePath = os.Args[1]
 	}
 
-	filter := noFilter
-	if len(os.Args) > 2 {
-		filter = parseFilter(os.Args[2])
-	}
-
-	skillGroups := readSkillGroupData(os.Args[1], filter)
+	skillGroups, buffs := readSkillGroupData(skillGroupFilePath)
 
 	mergedBy3 := mergeBy3(skillGroups)
+
+	compareSkillGroup := compareSkillGroupByNumber
+	priorityFlag := priorityFilePath != ""
+	if priorityFlag {
+		readPriority(priorityFilePath, buffs)
+		compareSkillGroup = compareSkillGroupByPriority
+	}
 
 	slices.SortFunc(mergedBy3, compareSkillGroup)
 
@@ -52,20 +62,19 @@ func main() {
 	})
 
 	for _, group := range mergedBy3 {
-		csvWriter.Write(group.ToCSV())
+		csvWriter.Write(group.ToCSV(priorityFlag))
 	}
 	csvWriter.Flush()
 }
 
-func readSkillGroupData(path string, buffFilter BuffFilter) []SkillGroup {
+func readSkillGroupData(path string) ([]SkillGroup, []*Buff) {
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
 	}
 	defer file.Close()
 
-	csvReader := csv.NewReader(file)
-	data, err := csvReader.ReadAll()
+	data, err := csv.NewReader(file).ReadAll()
 	if err != nil {
 		panic(err)
 	}
@@ -74,16 +83,10 @@ func readSkillGroupData(path string, buffFilter BuffFilter) []SkillGroup {
 	skillGroupCount := len(groupNames)
 	buffs := make([]*Buff, len(data)-1)
 	for buffIndex, buffLine := range data[1:] {
-		catStr := buffLine[1]
-		category, ok := ParseCategory(catStr)
-		if !ok {
-			panic("Invalid category: " + catStr)
-		}
-
 		buff := Buff{
 			name:        buffLine[0],
-			category:    category,
-			damage:      ParseDamageType(buffLine[2]),
+			category:    buffLine[1],
+			damage:      buffLine[2],
 			description: buffLine[3],
 			skillGroups: make(map[string]struct{}, skillGroupCount),
 		}
@@ -94,8 +97,6 @@ func readSkillGroupData(path string, buffFilter BuffFilter) []SkillGroup {
 			}
 		}
 
-		buff.valid = buffFilter(&buff)
-
 		buffs[buffIndex] = &buff
 	}
 
@@ -103,7 +104,7 @@ func readSkillGroupData(path string, buffFilter BuffFilter) []SkillGroup {
 	for groupIndex, groupName := range groupNames {
 		groupBuffs := map[string]*Buff{}
 		for _, buff := range buffs {
-			if _, ok := buff.skillGroups[groupName]; ok && buff.valid {
+			if _, ok := buff.skillGroups[groupName]; ok {
 				groupBuffs[buff.name] = buff
 			}
 		}
@@ -114,7 +115,7 @@ func readSkillGroupData(path string, buffFilter BuffFilter) []SkillGroup {
 		}
 	}
 
-	return skillGroups
+	return skillGroups, buffs
 }
 
 func mergeSkillGroups(groups []SkillGroup) SkillGroup {
@@ -160,4 +161,41 @@ func mergeBy3(groups []SkillGroup) []SkillGroup {
 	}
 
 	return mergedGroups
+}
+
+func readPriority(path string, buffs []*Buff) {
+	file, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	data, err := csv.NewReader(file).ReadAll()
+	if err != nil {
+		panic(err)
+	}
+
+	buffNameToPriority := make(map[string]uint, len(data))
+	for buffIndex, buffLine := range data {
+		buffPriorityStr := buffLine[1]
+		if buffPriorityStr == "" {
+			continue
+		}
+
+		buffPriority, err := strconv.ParseUint(buffPriorityStr, 10, 32)
+		if err != nil {
+			if buffIndex == 0 { // could have a header line
+				continue
+			}
+			panic(err)
+		}
+
+		buffNameToPriority[buffLine[0]] = uint(buffPriority)
+	}
+
+	for _, buff := range buffs {
+		if priority, ok := buffNameToPriority[buff.name]; ok {
+			buff.priority = priority
+		}
+	}
 }
