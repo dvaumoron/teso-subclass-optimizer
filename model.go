@@ -22,6 +22,7 @@ import (
 	"cmp"
 	"maps"
 	"slices"
+	"strconv"
 	"strings"
 )
 
@@ -52,6 +53,7 @@ func (sg SkillGroup) ToCSV(scoreFlag bool) []string {
 	res := make([]string, 3, len(sg.buffs)+3)
 	copy(res, strings.Split(sg.name, ","))
 	if scoreFlag {
+		res = append(res, strconv.FormatUint(uint64(sumScore(sg)), 10))
 		for _, buff := range slices.SortedFunc(maps.Values(sg.buffs), compareBuffByScoreName) {
 			res = append(res, buff.name)
 		}

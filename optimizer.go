@@ -27,6 +27,11 @@ import (
 	"strings"
 )
 
+var (
+	headerScored = []string{"Group Name 1", "Group Name 2", "Group Name 3", "Score", "Buffs"}
+	headerBasic  = []string{"Group Name 1", "Group Name 2", "Group Name 3", "Buffs"}
+)
+
 func main() {
 	skillGroupFilePath, scoreFilePath := "", ""
 	switch lenArgs := len(os.Args); {
@@ -52,19 +57,7 @@ func main() {
 
 	slices.SortFunc(mergedBy3, compareSkillGroup)
 
-	csvWriter := csv.NewWriter(os.Stdout)
-
-	csvWriter.Write([]string{
-		"Group Name 1",
-		"Group Name 2",
-		"Group Name 3",
-		"Buffs",
-	})
-
-	for _, group := range mergedBy3 {
-		csvWriter.Write(group.ToCSV(scoreFlag))
-	}
-	csvWriter.Flush()
+	printSkillGroupsCSV(mergedBy3, scoreFlag)
 }
 
 func readSkillGroupData(path string) ([]SkillGroup, []*Buff) {
@@ -198,4 +191,19 @@ func readScore(path string, buffs []*Buff) {
 			buff.score = score
 		}
 	}
+}
+
+func printSkillGroupsCSV(mergedBy3 []SkillGroup, scoreFlag bool) {
+	csvWriter := csv.NewWriter(os.Stdout)
+
+	header := headerBasic
+	if scoreFlag {
+		header = headerScored
+	}
+	csvWriter.Write(header)
+
+	for _, group := range mergedBy3 {
+		csvWriter.Write(group.ToCSV(scoreFlag))
+	}
+	csvWriter.Flush()
 }
