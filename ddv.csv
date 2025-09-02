@@ -1,12 +1,12 @@
-nom du buff, priorité
-berserk majeur,2
-berserk mineur,3
-brutalité majeur,1
-brutalité mineur,1
-courage mineur,1
+nom du buff,score
+berserk majeur,10
+berserk mineur,5
+brutalité majeur,20
+brutalité mineur,10
+courage mineur,5
 renforcement,
-endurance majeur,8
-endurance mineur,9
+endurance majeur,2
+endurance mineur,1
 évitement majeur,
 évitement mineur,
 expédition majeur,
@@ -14,8 +14,8 @@ expédition mineur,
 force mineur,7
 guérison majeur,
 guérison mineur,
-héroisme majeur,8
-héroisme mineur,9
+héroisme majeur,2
+héroisme mineur,1
 intellect mineur,
 prophétie majeur,
 prophétie mineur,
@@ -26,7 +26,7 @@ résolution mineur,
 résilience majeur,
 résilience mineur,
 sauvagerie majeur,6
-sauvagerie mineur,7
+sauvagerie mineur,3
 solidité mineur,
 sorcellerie majeur,
 sorcellerie mineur,
@@ -34,7 +34,7 @@ vitalité majeur,
 vitalité mineur,
 vol de magie mineur,
 vol de vie mineur,
-brèche majeur,4
-brèche mineur,5
-vulnérabilité majeur,2
-vulnérabilité mineur,3
+brèche majeur,3
+brèche mineur,2
+vulnérabilité majeur,10
+vulnérabilité mineur,5

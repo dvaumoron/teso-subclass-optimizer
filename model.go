@@ -21,14 +21,11 @@ package main
 import (
 	"cmp"
 	"maps"
-	"math"
 	"slices"
 	"strings"
 )
 
-const maxPriority = 100
-
-var prioritiesCache = map[string][]uint{}
+var scoreCache = map[string]uint{}
 
 type Buff struct {
 	name        string
@@ -36,19 +33,12 @@ type Buff struct {
 	damage      string
 	description string
 	skillGroups map[string]struct{}
-	priority    uint
+	score       uint
 }
 
-func zeroAsMax(i uint) uint {
-	if i == 0 {
-		return math.MaxUint
-	}
-	return i
-}
-
-func compareBuffByPriorityName(a *Buff, b *Buff) int {
+func compareBuffByScoreName(a *Buff, b *Buff) int {
 	return cmp.Or(
-		cmp.Compare(zeroAsMax(a.priority), zeroAsMax(b.priority)),
+		cmp.Compare(b.score, a.score),
 		cmp.Compare(a.name, b.name),
 	)
 }
@@ -58,11 +48,11 @@ type SkillGroup struct {
 	buffs map[string]*Buff
 }
 
-func (sg SkillGroup) ToCSV(priorityFlag bool) []string {
+func (sg SkillGroup) ToCSV(scoreFlag bool) []string {
 	res := make([]string, 3, len(sg.buffs)+3)
 	copy(res, strings.Split(sg.name, ","))
-	if priorityFlag {
-		for _, buff := range slices.SortedFunc(maps.Values(sg.buffs), compareBuffByPriorityName) {
+	if scoreFlag {
+		for _, buff := range slices.SortedFunc(maps.Values(sg.buffs), compareBuffByScoreName) {
 			res = append(res, buff.name)
 		}
 	} else {
@@ -75,32 +65,22 @@ func compareSkillGroupByNumber(a SkillGroup, b SkillGroup) int {
 	return cmp.Compare(len(b.buffs), len(a.buffs))
 }
 
-func compareSkillGroupByPriority(a SkillGroup, b SkillGroup) int {
-	aCount := countByPriority(a)
-	bCount := countByPriority(b)
-
-	for i := 1; i < maxPriority; i++ {
-		if c := cmp.Compare(bCount[i], aCount[i]); c != 0 {
-			return c
-		}
-	}
-
-	return cmp.Compare(bCount[0], aCount[0])
+func compareSkillGroupByScore(a SkillGroup, b SkillGroup) int {
+	return cmp.Compare(sumScore(b), sumScore(a))
 }
 
-func countByPriority(group SkillGroup) []uint {
+func sumScore(group SkillGroup) uint {
 	groupName := group.name
-	priorities, ok := prioritiesCache[groupName]
+	score, ok := scoreCache[groupName]
 	if ok {
-		return priorities
+		return score
 	}
 
-	priorities = make([]uint, maxPriority)
 	for _, buff := range group.buffs {
-		priorities[buff.priority]++
+		score += buff.score
 	}
 
-	prioritiesCache[groupName] = priorities
+	scoreCache[groupName] = score
 
-	return priorities
+	return score
 }

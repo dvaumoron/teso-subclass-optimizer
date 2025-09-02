@@ -28,12 +28,12 @@ import (
 )
 
 func main() {
-	skillGroupFilePath, priorityFilePath := "", ""
+	skillGroupFilePath, scoreFilePath := "", ""
 	switch lenArgs := len(os.Args); {
 	case lenArgs < 2:
 		panic("Please provide a path to the sub-class data file.")
 	default:
-		priorityFilePath = os.Args[2]
+		scoreFilePath = os.Args[2]
 		fallthrough
 	case lenArgs == 2:
 		skillGroupFilePath = os.Args[1]
@@ -44,10 +44,10 @@ func main() {
 	mergedBy3 := mergeBy3(skillGroups)
 
 	compareSkillGroup := compareSkillGroupByNumber
-	priorityFlag := priorityFilePath != ""
-	if priorityFlag {
-		readPriority(priorityFilePath, buffs)
-		compareSkillGroup = compareSkillGroupByPriority
+	scoreFlag := scoreFilePath != ""
+	if scoreFlag {
+		readScore(scoreFilePath, buffs)
+		compareSkillGroup = compareSkillGroupByScore
 	}
 
 	slices.SortFunc(mergedBy3, compareSkillGroup)
@@ -62,7 +62,7 @@ func main() {
 	})
 
 	for _, group := range mergedBy3 {
-		csvWriter.Write(group.ToCSV(priorityFlag))
+		csvWriter.Write(group.ToCSV(scoreFlag))
 	}
 	csvWriter.Flush()
 }
@@ -163,7 +163,7 @@ func mergeBy3(groups []SkillGroup) []SkillGroup {
 	return mergedGroups
 }
 
-func readPriority(path string, buffs []*Buff) {
+func readScore(path string, buffs []*Buff) {
 	file, err := os.Open(path)
 	if err != nil {
 		panic(err)
@@ -175,14 +175,14 @@ func readPriority(path string, buffs []*Buff) {
 		panic(err)
 	}
 
-	buffNameToPriority := make(map[string]uint, len(data))
+	buffNameToScore := make(map[string]uint, len(data))
 	for buffIndex, buffLine := range data {
-		buffPriorityStr := buffLine[1]
-		if buffPriorityStr == "" {
+		buffScoreStr := buffLine[1]
+		if buffScoreStr == "" {
 			continue
 		}
 
-		buffPriority, err := strconv.ParseUint(buffPriorityStr, 10, 32)
+		buffScore, err := strconv.ParseUint(buffScoreStr, 10, 32)
 		if err != nil {
 			if buffIndex == 0 { // could have a header line
 				continue
@@ -190,12 +190,12 @@ func readPriority(path string, buffs []*Buff) {
 			panic(err)
 		}
 
-		buffNameToPriority[buffLine[0]] = uint(buffPriority)
+		buffNameToScore[buffLine[0]] = uint(buffScore)
 	}
 
 	for _, buff := range buffs {
-		if priority, ok := buffNameToPriority[buff.name]; ok {
-			buff.priority = priority
+		if score, ok := buffNameToScore[buff.name]; ok {
+			buff.score = score
 		}
 	}
 }
